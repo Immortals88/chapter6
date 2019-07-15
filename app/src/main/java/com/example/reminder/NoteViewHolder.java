@@ -38,7 +38,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     public void bind(final mySchema note){
         contentText.setText(note.getText());
         dateText.setText(SIMPLE_DATE_FORMAT.format(note.getDate()));
-        checkBox.setChecked(note.getState() == 3);
+        checkBox.setChecked(note.getState() == 0);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -58,5 +58,17 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         } else {
             contentText.setTextColor(Color.BLACK);
         }
+        switch (note.getPriority()){
+            case 3:
+                itemView.setBackgroundColor(Color.RED);
+                break;
+
+            case 2:
+                itemView.setBackgroundColor(Color.YELLOW);
+                break;
+
+
+        }
+
     }
 }

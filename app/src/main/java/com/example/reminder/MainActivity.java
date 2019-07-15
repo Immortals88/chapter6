@@ -1,11 +1,14 @@
 package com.example.reminder;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -16,11 +19,16 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_EDIT=999;
     private RecyclerView recyclerView;
     private MyListAdapter notesAdapter;
     private myDataBase dataBase;
+    private static RefreshNote  flush;
+    private static UpdateNoteTask  updateNoteTask;
+    private DeleteNoteTask mDeleteNoteTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 startActivityForResult(new Intent(MainActivity.this, EditNote.class),REQUEST_EDIT);
             }
         });
@@ -54,18 +60,29 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.updateNode(note);
             }
         });
+        recyclerView.setAdapter(notesAdapter);
+        show();
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EDIT
+                && resultCode == Activity.RESULT_OK) {
+            show();
+        }
     }
 
     private void updateNode(mySchema note) {
-
-    }
-
-    private void deleteNote(mySchema note) {
-        if(dataBase==null){
+        if (dataBase == null) {
             return;
         }
+        updateNoteTask = new UpdateNoteTask();
+        updateNoteTask.execute(note);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,5 +112,54 @@ public class MainActivity extends AppCompatActivity {
 
         super.onDestroy();
         dataBase = null;
+    }
+
+    public void show(){
+        flush = new RefreshNote();
+        flush.execute();
+    }
+    private class UpdateNoteTask extends AsyncTask<mySchema, Integer, Boolean> {
+        @Override
+        protected Boolean doInBackground(mySchema... notes) {
+            return dataBase.noteDao().update(notes[0])> 0;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            super.onPostExecute(success);
+            show();
+        }
+    }
+
+    private class RefreshNote extends AsyncTask<Void, Integer, List<mySchema>> {
+        @Override
+        protected List<mySchema> doInBackground(Void... voids) {
+            return dataBase.noteDao().getNotes();
+        }
+
+        @Override
+        protected void onPostExecute(List<mySchema> notes) {
+            super.onPostExecute(notes);
+            notesAdapter.refresh(notes);
+        }
+    }
+    private void deleteNote(mySchema note) {
+        if (dataBase == null) {
+            return;
+        }
+        mDeleteNoteTask = new DeleteNoteTask();
+        mDeleteNoteTask.execute(note);
+    }
+    private class DeleteNoteTask extends AsyncTask<mySchema, Integer, Boolean> {
+        @Override
+        protected Boolean doInBackground(mySchema... notes) {
+            return dataBase.noteDao().deleteNote(notes[0]) > 0;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            super.onPostExecute(success);
+            show();
+        }
     }
 }

@@ -16,9 +16,9 @@ public interface NoteDao {
     int deleteNote(mySchema note);
 
     @Insert
-    void InsertNote(mySchema note);
+    long InsertNote(mySchema note);
 
     @Update
-    void  update(mySchema note);
+    int  update(mySchema note);
 
 }

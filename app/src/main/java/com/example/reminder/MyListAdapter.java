@@ -12,8 +12,7 @@ import java.util.List;
 
 public class MyListAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     private final NoteOperation operator;
-    private final List<mySchema> notes = new ArrayList<>();
-
+    private List<mySchema> notes = new ArrayList<>();
 
     public MyListAdapter(NoteOperation operator) {
         this.operator = operator;
@@ -42,4 +41,6 @@ public class MyListAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     public int getItemCount() {
         return notes.size();
     }
+
+
 }
