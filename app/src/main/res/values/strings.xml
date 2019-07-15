@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Reminder</string>
+    <string name="action_settings">Settings</string>
+    <string name="Low">None</string>
+    <string name="Medium">!</string>
+    <string name="High">! ! !</string>
+    <string name="Commit">Add to List</string>
+    <string name="Hint">Write Down Your Event</string>
+    <string name="Title">Edit note</string>
+    <string name="Priority">Priority:</string>
+</resources>
