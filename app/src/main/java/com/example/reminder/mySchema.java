@@ -1,5 +1,6 @@
 package com.example.reminder;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -8,10 +9,19 @@ import java.util.Date;
 @Entity(tableName = "notes")
 public class mySchema {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     private int id;
+
+    @ColumnInfo(name = "text")
     private String text;
+
+    @ColumnInfo(name = "state")
     private int state;
+
+    @ColumnInfo(name = "date")
     private int date;
+
+    @ColumnInfo(name = "priority")
     private int priority;
 
     /*

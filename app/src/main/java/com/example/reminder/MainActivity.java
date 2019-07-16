@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(List<mySchema> notes) {
             super.onPostExecute(notes);
             notesAdapter.refresh(notes);
+            recyclerView.setAdapter(notesAdapter);
         }
     }
     private void deleteNote(mySchema note) {
