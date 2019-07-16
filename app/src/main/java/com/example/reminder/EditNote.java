@@ -42,6 +42,7 @@ public class EditNote extends AppCompatActivity {
                 String content = editText.getText().toString();
                 if (content.isEmpty()) {
                     editText.setError("Empty text is not allowed");
+                    addButton.setClickable(true);
                     return;
                 }
                 mySchema node = new mySchema();
