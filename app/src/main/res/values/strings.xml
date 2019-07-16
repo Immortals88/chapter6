@@ -8,4 +8,5 @@
     <string name="Hint">Write Down Your Event</string>
     <string name="Title">Edit note</string>
     <string name="Priority">Priority:</string>
+    <string name="check">显示已完成的任务</string>
 </resources>

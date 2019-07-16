@@ -52,7 +52,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
                 operator.deleteNote(note);
             }
         });
-        if (note.getState() == 1) {
+        if (note.getState() == 0) {
             contentText.setTextColor(Color.GRAY);
 
         } else {

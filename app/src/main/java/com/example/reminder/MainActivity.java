@@ -18,23 +18,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_EDIT=999;
     private RecyclerView recyclerView;
     private MyListAdapter notesAdapter;
+    private CheckBox  checkBox;
     private myDataBase dataBase;
     private static RefreshNote  flush;
     private static UpdateNoteTask  updateNoteTask;
     private DeleteNoteTask mDeleteNoteTask;
+    private boolean extra;
+    private List<mySchema> a=new ArrayList<mySchema>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        extra=false;
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         recyclerView.setAdapter(notesAdapter);
+        checkBox=findViewById(R.id.cb_check);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                extra=b;
+                show();
+            }
+        });
         show();
 
     }
@@ -134,7 +149,12 @@ public class MainActivity extends AppCompatActivity {
     private class RefreshNote extends AsyncTask<Void, Integer, List<mySchema>> {
         @Override
         protected List<mySchema> doInBackground(Void... voids) {
-            return dataBase.noteDao().getNotes();
+            if(extra==false)
+                return dataBase.noteDao().getNotes();
+            else
+                a=dataBase.noteDao().getNotes();
+                a.addAll(dataBase.noteDao().getExtraNotes());
+                return a;
         }
 
         @Override

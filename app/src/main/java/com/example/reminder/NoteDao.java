@@ -12,6 +12,9 @@ import java.util.List;
 public interface NoteDao {
     @Query("select * from notes where state = 1 order by priority desc")
     List<mySchema>  getNotes();
+
+    @Query("select * from notes where state=0")
+    List<mySchema> getExtraNotes();
     @Delete
     int deleteNote(mySchema note);
 
